@@ -1,0 +1,16 @@
+.container {
+    display: flex;
+    align-items: center;
+}
+
+.avatar {
+    border-radius: 9999px;
+}
+
+.avatar + strong {
+    margin-right: 8px;
+}
+
+.strong {
+    color: rgba(0, 0, 0, 0.8);
+}
