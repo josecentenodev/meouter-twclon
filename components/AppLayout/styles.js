@@ -18,6 +18,9 @@ export default css`
         height: 100%;
         width: 100%;
         overflow: auto;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
     }
     @media (min-width: ${breakpoints.mobile}) {
         main {

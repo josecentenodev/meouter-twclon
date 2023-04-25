@@ -1,14 +1,17 @@
 import Avatar from '@components/Avatar'
+import useTimeAgo from 'hooks/useTimeAgo'
+import Image from 'next/image'
 
 export default function Meowter({
     avatar,
     userName,
     content,
+    img,
     id,
     userId,
     createAt,
 }) {
-    console.log(createAt)
+    const timeAgo = useTimeAgo(createAt)
     return (
         <>
             <article key={id}>
@@ -19,9 +22,21 @@ export default function Meowter({
                     <header>
                         <strong>{userName}</strong>
                         <span> - </span>
-                        <time>{createAt}</time>
+                        <time>{timeAgo}</time>
                     </header>
                     <p>{content}</p>
+                    {img && (
+                        <Image
+                            alt={content}
+                            width={150}
+                            height={150}
+                            src={img}
+                            style={{
+                                minWidth: '100%',
+                                height: 'auto',
+                            }}
+                        />
+                    )}
                 </section>
             </article>
             <style jsx>{`

@@ -5,8 +5,15 @@ import {
     collection,
     addDoc,
     getDocs,
+    orderBy,
 } from '@firebase/firestore'
 import { getAuth, GoogleAuthProvider, signInWithPopup } from 'firebase/auth'
+import {
+    getStorage,
+    ref,
+    uploadBytesResumable,
+    getDownloadURL,
+} from 'firebase/storage'
 
 const firebaseConfig = {
     apiKey: 'AIzaSyCofEdYjfB2L4y48kVQlu5PZOZdmH1s-yw',
@@ -23,6 +30,8 @@ const app = initializeApp(firebaseConfig)
 const auth = getAuth(app)
 
 const db = getFirestore(app)
+
+const storage = getStorage(app)
 
 const mapUserFromFirebaseAuthToUser = (user) => {
     if (!user) return null
@@ -47,10 +56,11 @@ export const loginWithGoogle = () => {
     return signInWithPopup(auth, googleProvider)
 }
 
-export const addMeow = ({ avatar, content, userId, userName }) => {
+export const addMeow = ({ avatar, content, img, userId, userName }) => {
     return addDoc(collection(db, 'meows'), {
         avatar,
         content,
+        img,
         userId,
         userName,
         createAt: Timestamp.fromDate(new Date()),
@@ -60,21 +70,30 @@ export const addMeow = ({ avatar, content, userId, userName }) => {
 }
 
 export const fetchLatestMeows = () => {
-    return getDocs(collection(db, 'meows')).then((snapshot) => {
-        return snapshot.docs.map((doc) => {
-            const data = doc.data()
-            const id = doc.id
-            const { createAt } = data
-            const date = new Date(createAt.seconds * 1000)
-            const normalizedCreateAt = new Intl.DateTimeFormat('es-Es').format(
-                date
-            )
-            console.log(data, id)
-            return {
-                ...data,
-                id,
-                createAt: normalizedCreateAt,
-            }
-        })
-    })
+    return getDocs(collection(db, 'meows'), orderBy('createdAt')).then(
+        (snapshot) => {
+            return snapshot.docs.map((doc) => {
+                const data = doc.data()
+                const id = doc.id
+                const { createAt } = data
+
+                return {
+                    ...data,
+                    id,
+                    createAt: +createAt.toDate(),
+                }
+            })
+        }
+    )
+}
+
+export const uploadImage = (file) => {
+    const fileName = file.name
+    const fileRef = ref(storage, 'images/' + fileName)
+    const uploadTask = uploadBytesResumable(fileRef, file)
+    return uploadTask
+}
+
+export const getURL = (ref) => {
+    return getDownloadURL(ref)
 }
