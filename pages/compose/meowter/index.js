@@ -1,4 +1,3 @@
-import AppLayout from '@components/AppLayout'
 import Button from '@components/Button'
 import useUser from 'hooks/useUser'
 import { useState, useEffect } from 'react'
@@ -6,6 +5,7 @@ import { addMeow, uploadImage, getURL } from '@firebase/client'
 import { useRouter } from 'next/router'
 import Head from 'next/head'
 import Image from 'next/image'
+import Avatar from '@components/Avatar'
 
 const COMPOSE_STATES = {
     USER_NOT_KNOWN: 0,
@@ -127,11 +127,12 @@ export default function ComposeMeowter() {
         !content.length || status === COMPOSE_STATES.LOADING
     return (
         <>
-            <AppLayout>
-                <Head>
-                    <title>Escribe un Meow! | Meowter</title>
-                    <link rel="icon" href="/favicon.png" />
-                </Head>
+            <Head>
+                <title>Escribe un Meow! | Meowter</title>
+                <link rel="icon" href="/favicon.png" />
+            </Head>
+            <section className="composeSection">
+                {user && <Avatar alt={user.userName} src={user.avatar} />}
                 <form onSubmit={handleSubmit}>
                     <textarea
                         onChange={handleChange}
@@ -141,7 +142,7 @@ export default function ComposeMeowter() {
                         onDrop={handleDrop}
                     ></textarea>
                     {imgURL && (
-                        <section>
+                        <section className="imageSection">
                             <button onClick={() => setImgURL(null)}>X</button>
                             <Image
                                 width={125}
@@ -155,12 +156,18 @@ export default function ComposeMeowter() {
                         <Button disabled={isButtonDisabled}>Meow!</Button>
                     </div>
                 </form>
-            </AppLayout>
+            </section>
             <style jsx>{`
                 form {
-                    margin: 10px;
+                    flex: 1;
                 }
-                section > :global(img) {
+                .composeSection {
+                    display: flex;
+                    flex-direction: row;
+                    align-items: flex-start;
+                    padding: 10px;
+                }
+                .imageSection > :global(img) {
                     border-radius: 10px;
                     margin: 10px;
                 }
@@ -171,12 +178,12 @@ export default function ComposeMeowter() {
                         : `2px solid transparent`};
                     border-radius: 10px;
                     font-size: 21px;
-                    padding: 15px;
+                    padding: 10px;
                     resize: none;
                     outline: 0;
                     min-height: 200px;
                 }
-                section {
+                .imageSection {
                     position: relative;
                 }
                 button {
@@ -194,7 +201,7 @@ export default function ComposeMeowter() {
                     cursor: pointer;
                 }
                 div {
-                    padding: 15px;
+                    padding: 10px;
                 }
             `}</style>
         </>

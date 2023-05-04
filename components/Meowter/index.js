@@ -1,6 +1,9 @@
 import Avatar from '@components/Avatar'
 import useTimeAgo from 'hooks/useTimeAgo'
+import useDateTimeFormat from 'hooks/useDateTimeFormat'
 import Image from 'next/image'
+import Link from 'next/link'
+import { useRouter } from 'next/router'
 
 export default function Meowter({
     avatar,
@@ -9,12 +12,19 @@ export default function Meowter({
     img,
     id,
     userId,
-    createAt,
+    createdAt,
 }) {
-    const timeAgo = useTimeAgo(createAt)
+    const timeAgo = useTimeAgo(createdAt)
+    const createdAtFormated = useDateTimeFormat(createdAt)
+    const router = useRouter()
+
+    const handleClick = (e) => {
+        e.preventDefault()
+        router.push(`/status/${id}`)
+    }
     return (
         <>
-            <article key={id}>
+            <article key={id} onClick={handleClick}>
                 <div>
                     <Avatar alt={userName} src={avatar} />
                 </div>
@@ -22,7 +32,9 @@ export default function Meowter({
                     <header>
                         <strong>{userName}</strong>
                         <span> - </span>
-                        <time>{timeAgo}</time>
+                        <Link href={`status/${id}`}>
+                            <time title={createdAtFormated}>{timeAgo}</time>
+                        </Link>
                     </header>
                     <p>{content}</p>
                     {img && (
@@ -42,9 +54,12 @@ export default function Meowter({
             <style jsx>{`
                 article {
                     display: flex;
-                    margin-bottom: 10px;
                     border-bottom: 0.5px solid #eee;
-                    padding: 0 15px;
+                    padding: 10px 15px;
+                }
+                article:hover {
+                    background: rgba(0, 0, 0, 0.05);
+                    cursor: pointer;
                 }
                 div {
                     padding: 0 15px;
@@ -57,6 +72,13 @@ export default function Meowter({
                     color: #555;
                     font-size: 12px;
                     font-weight: 600;
+                }
+                header > :global(a) {
+                    text-decoration: none;
+                }
+                header > :global(a):hover {
+                    text-decoration: underline;
+                    color: #555;
                 }
             `}</style>
         </>

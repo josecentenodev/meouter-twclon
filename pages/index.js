@@ -2,7 +2,6 @@ import Head from 'next/head'
 import Image from 'next/image'
 import { loginWithGoogle } from '@firebase/client'
 import GoogleIcon from '@components/Icons/GoogleIcon'
-import AppLayout from '@components/AppLayout'
 import Button from '@components/Button'
 import { colors } from 'styles/theme'
 import { useEffect } from 'react'
@@ -15,7 +14,7 @@ export default function Home() {
 
     useEffect(() => {
         user && router.replace('/home')
-    }, [user])
+    }, [user, router])
 
     const handleClick = () => {
         loginWithGoogle()
@@ -31,24 +30,22 @@ export default function Home() {
                 <link rel="icon" href="/favicon.png" />
             </Head>
 
-            <AppLayout>
-                <section>
-                    <Image
-                        src="/meowter.png"
-                        alt="user avatar"
-                        width={300}
-                        height={300}
-                    />
-                    <h2>Talk about Cats & Code</h2>
-                    {user === USER_STATES.NOT_LOGGED && (
-                        <Button onClick={handleClick}>
-                            <GoogleIcon />
-                            Login with Google
-                        </Button>
-                    )}
-                    {user === USER_STATES.NOT_KNOWN && <span>Loading...</span>}
-                </section>
-            </AppLayout>
+            <section>
+                <Image
+                    src="/meowter.png"
+                    alt="user avatar"
+                    width={300}
+                    height={300}
+                />
+                <h2>Talk about Cats & Code</h2>
+                {user === USER_STATES.NOT_LOGGED && (
+                    <Button onClick={handleClick}>
+                        <GoogleIcon />
+                        Login with Google
+                    </Button>
+                )}
+                {user === USER_STATES.NOT_KNOWN && <span>Loading...</span>}
+            </section>
             <style jsx>{`
                 section {
                     display: grid;

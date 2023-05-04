@@ -6,6 +6,8 @@ import {
     addDoc,
     getDocs,
     orderBy,
+    onSnapshot,
+    query,
 } from '@firebase/firestore'
 import { getAuth, GoogleAuthProvider, signInWithPopup } from 'firebase/auth'
 import {
@@ -32,6 +34,18 @@ const auth = getAuth(app)
 const db = getFirestore(app)
 
 const storage = getStorage(app)
+
+const mapMeowFromFirebaseToMeowObject = (doc) => {
+    const data = doc.data()
+    const id = doc.id
+    const { createdAt } = data
+
+    return {
+        ...data,
+        id,
+        createdAt: +createdAt.toDate(),
+    }
+}
 
 const mapUserFromFirebaseAuthToUser = (user) => {
     if (!user) return null
@@ -63,7 +77,7 @@ export const addMeow = ({ avatar, content, img, userId, userName }) => {
         img,
         userId,
         userName,
-        createAt: Timestamp.fromDate(new Date()),
+        createdAt: Timestamp.fromDate(new Date()),
         likesCount: 0,
         sharedCount: 0,
     })
@@ -72,17 +86,24 @@ export const addMeow = ({ avatar, content, img, userId, userName }) => {
 export const fetchLatestMeows = () => {
     return getDocs(collection(db, 'meows'), orderBy('createdAt')).then(
         (snapshot) => {
-            return snapshot.docs.map((doc) => {
-                const data = doc.data()
-                const id = doc.id
-                const { createAt } = data
+            return snapshot.docs.map(mapMeowFromFirebaseToMeowObject)
+        }
+    )
+}
 
-                return {
-                    ...data,
-                    id,
-                    createAt: +createAt.toDate(),
-                }
-            })
+export const listenLatestDevits = (callback) => {
+    return (
+        onSnapshot(
+            query(collection(db, 'meows'), orderBy('createdAt', 'desc')),
+            (snapshot) => {
+                const newMeows = snapshot.docs.map(
+                    mapMeowFromFirebaseToMeowObject
+                )
+                callback(newMeows)
+            }
+        ),
+        (error) => {
+            console.log('client.js linea 106: ', error)
         }
     )
 }
