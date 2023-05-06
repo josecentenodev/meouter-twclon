@@ -103,6 +103,7 @@ export const listenLatestDevits = (callback) => {
             }
         ),
         (error) => {
+            if (error === undefined) return
             console.log('client.js linea 106: ', error)
         }
     )

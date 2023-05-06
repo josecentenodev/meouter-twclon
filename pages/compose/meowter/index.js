@@ -6,6 +6,8 @@ import { useRouter } from 'next/router'
 import Head from 'next/head'
 import Image from 'next/image'
 import Avatar from '@components/Avatar'
+import Link from 'next/link'
+import Home from '@components/Icons/Home'
 
 const COMPOSE_STATES = {
     USER_NOT_KNOWN: 0,
@@ -131,32 +133,43 @@ export default function ComposeMeowter() {
                 <title>Escribe un Meow! | Meowter</title>
                 <link rel="icon" href="/favicon.png" />
             </Head>
-            <section className="composeSection">
-                {user && <Avatar alt={user.userName} src={user.avatar} />}
-                <form onSubmit={handleSubmit}>
-                    <textarea
-                        onChange={handleChange}
-                        placeholder="Que esta pasando?"
-                        onDragEnter={handleDragEnter}
-                        onDragLeave={handleDragLeave}
-                        onDrop={handleDrop}
-                    ></textarea>
-                    {imgURL && (
-                        <section className="imageSection">
-                            <button onClick={() => setImgURL(null)}>X</button>
-                            <Image
-                                width={125}
-                                height={125}
-                                src={imgURL}
-                                alt={content}
-                            />
-                        </section>
-                    )}
-                    <div>
-                        <Button disabled={isButtonDisabled}>Meow!</Button>
-                    </div>
-                </form>
-            </section>
+            <>
+                <section className="composeSection">
+                    {user && <Avatar alt={user.userName} src={user.avatar} />}
+                    <form onSubmit={handleSubmit}>
+                        <textarea
+                            onChange={handleChange}
+                            placeholder="Que esta pasando?"
+                            onDragEnter={handleDragEnter}
+                            onDragLeave={handleDragLeave}
+                            onDrop={handleDrop}
+                        ></textarea>
+                        {imgURL && (
+                            <section className="imageSection">
+                                <button onClick={() => setImgURL(null)}>
+                                    X
+                                </button>
+                                <Image
+                                    width={125}
+                                    height={125}
+                                    src={imgURL}
+                                    alt={content}
+                                />
+                            </section>
+                        )}
+                        <div>
+                            <Button disabled={isButtonDisabled}>Meow!</Button>
+                        </div>
+                    </form>
+                </section>
+                <nav>
+                    <span>
+                        <Link href="/home">
+                            <Home width={32} height={32} stroke="#212121" />
+                        </Link>
+                    </span>
+                </nav>
+            </>
             <style jsx>{`
                 form {
                     flex: 1;
@@ -202,6 +215,22 @@ export default function ComposeMeowter() {
                 }
                 div {
                     padding: 10px;
+                }
+                nav {
+                    background: #fff;
+                    bottom: 0;
+                    position: sticky;
+                    height: 49px;
+                    width: 100%;
+                    border-top: 1px solid #eee;
+                    display: flex;
+                    align-items: center;
+                    justify-content: space-around;
+                }
+                span {
+                    border-radius: 50%;
+                    width: 32px;
+                    height: 32px;
                 }
             `}</style>
         </>
