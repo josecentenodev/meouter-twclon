@@ -7,6 +7,7 @@ import { colors } from 'styles/theme'
 import { useEffect } from 'react'
 import { useRouter } from 'next/router'
 import useUser, { USER_STATES } from 'hooks/useUser'
+import LoadingIcon from '@components/Icons/LoadingIcon'
 
 export default function Home() {
     const user = useUser()
@@ -44,7 +45,7 @@ export default function Home() {
                         Login with Google
                     </Button>
                 )}
-                {user === USER_STATES.NOT_KNOWN && <span>Loading...</span>}
+                {user === USER_STATES.NOT_KNOWN && <LoadingIcon />}
             </section>
             <style jsx>{`
                 section {

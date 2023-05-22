@@ -92,6 +92,18 @@ export default function HomePage() {
                     align-items: center;
                     justify-content: space-around;
                 }
+                @media (max-width: 500px) {
+                    /* … */
+                    nav {
+                        position: absolute;
+                        bottom: 0;
+                        z-index: 100;
+                    }
+                    section {
+                        overflow: scroll;
+                        scroll: ;
+                    }
+                }
                 span {
                     border-radius: 50%;
                     width: 32px;
