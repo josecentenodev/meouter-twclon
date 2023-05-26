@@ -8,6 +8,7 @@ import Image from 'next/image'
 import Avatar from '@components/Avatar'
 import Link from 'next/link'
 import Home from '@components/Icons/Home'
+import NavBar from '@components/Nav'
 
 const COMPOSE_STATES = {
     USER_NOT_KNOWN: 0,
@@ -162,13 +163,7 @@ export default function ComposeMeowter() {
                         </div>
                     </form>
                 </section>
-                <nav>
-                    <span>
-                        <Link href="/home">
-                            <Home width={32} height={32} stroke="#212121" />
-                        </Link>
-                    </span>
-                </nav>
+                <NavBar />
             </>
             <style jsx>{`
                 form {

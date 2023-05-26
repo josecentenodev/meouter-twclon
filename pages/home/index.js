@@ -2,11 +2,9 @@ import Meowter from '@components/Meowter'
 import useUser from 'hooks/useUser'
 import { useState, useEffect } from 'react'
 import { listenLatestDevits, fetchLatestMeows } from '@firebase/client'
-import Link from 'next/link'
-import Create from '@components/Icons/Create'
-import Home from '@components/Icons/Home'
-import Search from '@components/Icons/Search'
+
 import Head from 'next/head'
+import NavBar from '@components/Nav'
 
 export default function HomePage() {
     const [timeline, setTimeline] = useState([])
@@ -43,23 +41,7 @@ export default function HomePage() {
                     />
                 ))}
             </section>
-            <nav>
-                <span>
-                    <Link href="/home">
-                        <Home width={32} height={32} stroke="#212121" />
-                    </Link>
-                </span>
-                {/* <span>
-                    <Link href="/search">
-                        <Search width={32} height={32} stroke="#212121" />
-                    </Link>
-                </span> */}
-                <span>
-                    <Link href="/compose/meowter">
-                        <Create width={32} height={32} stroke="#212121" />
-                    </Link>
-                </span>
-            </nav>
+            <NavBar />
             <style jsx>{`
                 header {
                     top: 0;
@@ -71,7 +53,6 @@ export default function HomePage() {
                     border-bottom: 1px solid #eee;
                     padding: 0 15px;
                     background: #ffffffaa;
-                    backdrop-filter: blur(5px);
                 }
                 h2 {
                     font-size: 21px;
@@ -79,6 +60,10 @@ export default function HomePage() {
                 }
                 section {
                     flex: 1;
+                    overflow-y: scroll;
+                    overflow-x: unset;
+                    height: 100vh;
+                    padding-bottom: 200px;
                 }
 
                 nav {
@@ -92,18 +77,7 @@ export default function HomePage() {
                     align-items: center;
                     justify-content: space-around;
                 }
-                @media (max-width: 500px) {
-                    /* … */
-                    nav {
-                        position: absolute;
-                        bottom: 0;
-                        z-index: 100;
-                    }
-                    section {
-                        overflow: scroll;
-                        scroll: ;
-                    }
-                }
+
                 span {
                     border-radius: 50%;
                     width: 32px;
